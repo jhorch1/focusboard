@@ -2,6 +2,8 @@
 
 Tablero Kanban con timer Pomodoro integrado. MVP académico desarrollado con React + TypeScript + Tailwind CSS.
 
+🚀 **Producción:** https://dazzling-chaja-5b647f.netlify.app
+
 ## Stack
 
 - React 18 + TypeScript (strict)
@@ -51,9 +53,9 @@ src/
 
 ## Equipo
 
-| Integrante | Rol |
-|---|---|
-| Integrante 1 | DevOps & Git Flow + Performance & Audit |
-| Integrante 2 | QA Engineer + Testing Lead |
-| Integrante 3 | UI/UX Frontend + Interacciones |
-| Integrante 4 | State & Logic Engineer |
+| Integrante | Nombre | Rol |
+|---|---|---|
+| Integrante 1 & 6 | Jorge | DevOps & Git Flow + Performance & Audit |
+| Integrante 2 | María | QA Engineer + Testing Lead |
+| Integrante 3 & 4 | Chindoy | UI/UX Frontend + Interacciones |
+| Integrante 5 | Harri | State & Logic Engineer |
