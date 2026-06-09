@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { priorityLabels, statusLabels, tasks } from '../data/tasks'
@@ -22,6 +22,7 @@ export default function Dashboard() {
   const [priority, setPriority] = useState<PriorityFilter>('all')
   const [status, setStatus] = useState<StatusFilter>('all')
 
+  // useMemo: recalcula la lista filtrada solo cuando cambian los filtros
   const filteredTasks = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
 
@@ -39,6 +40,28 @@ export default function Dashboard() {
     })
   }, [priority, search, status])
 
+  // useCallback: evita recrear handlers en cada render
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(event.target.value)
+    },
+    []
+  )
+
+  const handlePriorityChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setPriority(event.target.value as PriorityFilter)
+    },
+    []
+  )
+
+  const handleStatusChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setStatus(event.target.value as StatusFilter)
+    },
+    []
+  )
+
   return (
     <Layout title="Dashboard" subtitle="Organiza el trabajo por estado y prioridad.">
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -47,7 +70,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium text-slate-700">Buscar</span>
             <input
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={handleSearchChange}
               placeholder="Titulo, descripcion o etiqueta"
               className="mt-2 h-11 w-full rounded-lg border border-slate-200 px-3 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
             />
@@ -57,7 +80,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium text-slate-700">Prioridad</span>
             <select
               value={priority}
-              onChange={(event) => setPriority(event.target.value as PriorityFilter)}
+              onChange={handlePriorityChange}
               className="mt-2 h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
             >
               {priorities.map((item) => (
@@ -72,7 +95,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium text-slate-700">Estado</span>
             <select
               value={status}
-              onChange={(event) => setStatus(event.target.value as StatusFilter)}
+              onChange={handleStatusChange}
               className="mt-2 h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
             >
               {statusFilters.map((item) => (
