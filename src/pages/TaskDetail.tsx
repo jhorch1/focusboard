@@ -1,9 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { priorityLabels, statusLabels, tasks } from '../data/tasks'
+import { priorityLabels, statusLabels } from '../data/tasks'
+import { useTaskStore } from '../store/useTaskStore'
 
 export default function TaskDetail() {
   const { id } = useParams<{ id: string }>()
+  const tasks = useTaskStore((s) => s.tasks)
   const task = tasks.find((item) => item.id === id)
 
   if (!task) {
