@@ -138,7 +138,15 @@ export default function Dashboard() {
         {statuses.map((columnStatus) => {
           const columnTasks = filteredTasks.filter((task) => task.status === columnStatus)
           return (
-            <div key={columnStatus} className="rounded-lg border border-slate-200 bg-slate-100/70 p-3">
+            <div
+              key={columnStatus}
+              className="rounded-lg border border-slate-200 bg-slate-100/70 p-3"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                const id = e.dataTransfer.getData('text/plain')
+                if (id) useTaskStore.getState().moveTask(id, columnStatus)
+              }}
+            >
               <div className="flex items-center justify-between px-1 py-2">
                 <h2 className="text-sm font-semibold uppercase tracking-normal text-slate-600">
                   {statusLabels[columnStatus]}
@@ -149,26 +157,47 @@ export default function Dashboard() {
               </div>
               <div className="mt-2 space-y-3">
                 {columnTasks.map((task) => (
-                  <Link
+                  <div
                     key={task.id}
-                    to={`/task/${task.id}`}
+                    draggable
+                    onDragStart={(e) => e.dataTransfer.setData('text/plain', task.id)}
                     className="block rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-md"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-base font-semibold leading-6 text-slate-950">{task.title}</h3>
+                      <h3 className="text-base font-semibold leading-6 text-slate-950">
+                        <Link to={`/task/${task.id}`}>{task.title}</Link>
+                      </h3>
                       <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${priorityStyles[task.priority]}`}>
                         {priorityLabels[task.priority]}
                       </span>
                     </div>
                     <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-500">{task.description}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {task.tags.map((tag) => (
-                        <span key={tag} className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap gap-2">
+                        {task.tags.map((tag) => (
+                          <span key={tag} className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div>
+                        <label className="sr-only">Cambiar estado</label>
+                        <select
+                          aria-label={`change-status-${task.id}`}
+                          value={task.status}
+                          onChange={(e) => useTaskStore.getState().moveTask(task.id, e.target.value as TaskStatus)}
+                          className="ml-2 rounded border px-2 py-1 text-sm"
+                        >
+                          {statuses.map((s) => (
+                            <option key={s} value={s}>
+                              {statusLabels[s]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
                 {columnTasks.length === 0 && (
                   <div className="rounded-lg border border-dashed border-slate-300 bg-white/70 p-4 text-sm text-slate-500">

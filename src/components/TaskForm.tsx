@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTaskStore } from '../store/useTaskStore'
-import type { TaskPriority } from '../types'
+import type { TaskPriority, TaskStatus } from '../types'
 
 interface TaskFormProps {
   onSuccess?: () => void
@@ -11,6 +11,7 @@ export default function TaskForm({ onSuccess }: TaskFormProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<TaskPriority>('medium')
+  const [status, setStatus] = useState<TaskStatus>('todo')
   const [error, setError] = useState('')
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -26,7 +27,7 @@ export default function TaskForm({ onSuccess }: TaskFormProps) {
       id: crypto.randomUUID(),
       title: title.trim(),
       description: description.trim(),
-      status: 'todo',
+      status,
       priority,
       tags: [],
       createdAt: Date.now(),
@@ -90,6 +91,23 @@ export default function TaskForm({ onSuccess }: TaskFormProps) {
           <option value="low">Baja</option>
           <option value="medium">Media</option>
           <option value="high">Alta</option>
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="status" className="block text-sm font-medium text-slate-700">
+          Estado inicial
+        </label>
+        <select
+          id="status"
+          name="status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value as TaskStatus)}
+          className="mt-1 h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
+        >
+          <option value="todo">Por hacer</option>
+          <option value="in-progress">En progreso</option>
+          <option value="done">Hecho</option>
         </select>
       </div>
 
