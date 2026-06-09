@@ -30,7 +30,7 @@ describe('TaskForm component', () => {
 
     const titleInput = screen.getByPlaceholderText(/Título de la tarea/i)
     const descInput = screen.getByPlaceholderText(/Descripción/i)
-    const prioritySelect = screen.getByRole('combobox')
+    const prioritySelect = screen.getByLabelText(/Prioridad/i)
     const button = screen.getByRole('button', { name: /agregar/i })
 
     await userEvent.type(titleInput, 'Nueva tarea')
