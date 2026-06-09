@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { useTaskStore } from '../store/useTaskStore'
 import type { TaskPriority } from '../types'
 
-export default function TaskForm() {
+interface TaskFormProps {
+  onSuccess?: () => void
+}
+
+export default function TaskForm({ onSuccess }: TaskFormProps) {
   const addTask = useTaskStore((state) => state.addTask)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -31,6 +35,7 @@ export default function TaskForm() {
     setTitle('')
     setDescription('')
     setPriority('medium')
+    onSuccess?.()
   }
 
   return (
