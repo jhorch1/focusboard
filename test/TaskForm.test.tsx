@@ -1,12 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import TaskForm from '/src/components/TaskForm.tsx'
+import TaskForm from '../src/components/TaskForm.tsx'
 import { useTaskStore } from '../src/store/useTaskStore'
 
 describe('TaskForm component', () => {
   beforeEach(() => {
     window.localStorage.clear()
-    // reset store to empty tasks
     useTaskStore.setState({
       tasks: [],
       filterState: { search: '', priority: 'all', status: 'all' },
@@ -46,7 +45,6 @@ describe('TaskForm component', () => {
     expect(tasks[0].description).toBe('Detalle de la tarea')
     expect(tasks[0].priority).toBe('high')
 
-    // campos limpios
     expect((titleInput as HTMLInputElement).value).toBe('')
     expect((descInput as HTMLTextAreaElement).value).toBe('')
     expect((prioritySelect as HTMLSelectElement).value).toBe('medium')
